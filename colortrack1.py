@@ -41,6 +41,7 @@ def nothing(x):
 
 cap = cv2.VideoCapture(0);
 
+#create the trackbars (adjustable HSV values), intialize them to the desired blue color
 cv2.namedWindow("Tracking")
 cv2.createTrackbar("LH", "Tracking", 93, 255, nothing)
 cv2.createTrackbar("LS", "Tracking", 98, 255, nothing)
@@ -55,6 +56,7 @@ while True:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
+    #get the trackbar position to set HSV values
     l_h = cv2.getTrackbarPos("LH", "Tracking")
     l_s = cv2.getTrackbarPos("LS", "Tracking")
     l_v = cv2.getTrackbarPos("LV", "Tracking")
@@ -71,6 +73,8 @@ while True:
 
     res = cv2.bitwise_and(frame, frame, mask=mask)
 
+    #this contour part of the code was taken from https://pysource.com/2021/01/28/object-tracking-with-opencv-and-python/
+    #It finds the remaining contour after applying the HSV mask
     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     max_w=0
@@ -78,6 +82,8 @@ while True:
     max_x=0
     max_y=0
 
+    #this code identifies contours that are bigger than a certain area to reduce noise
+    #since the goal is to track a single object, I also made it so that only the maximum contour is tracked
     for cnt in contours:
         area = cv2.contourArea(cnt)
         if area>200:   
