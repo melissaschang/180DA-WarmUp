@@ -19,10 +19,11 @@ def on_disconnect(client, userdata, rc):
 def on_message(client, userdata, message):
     print('Received message: "' + str(message.payload) + '" on topic "' + message.topic + '" with QoS ' + str(message.qos))
     print('Publishing...')
-    client.publish('group8888/test', float(message.payload)+1, qos=1)
+    client.publish('group8888/test"', 'You said:' + str(message.payload) + '.Message received -Meli', qos=1)
     time.sleep(1)
 
 # 1. create a client instance.
+#suscribe to 888, post to 8888
 client = mqtt.Client()
 # add additional client options (security, certifications, etc.)
 # many default options should be good to start off.
@@ -36,7 +37,7 @@ client.connect_async("test.mosquitto.org")
 # 3. call one of the loop*() functions to maintain network traffic flow with the broker.
 client.loop_start()
 
-#client.publish('ece180d/group8b', 'Initial message -Meli', qos=1) ###****
+client.publish('ece180d/group8b', 'hi -Meli', qos=1) ###****
 # 4. use subscribe() to subscribe to a topic and receive messages.
 # 5. use publish() to publish messages to the broker.
 # payload must be a string, bytearray, int, float or None.
